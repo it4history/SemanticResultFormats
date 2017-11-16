@@ -78,11 +78,13 @@ class SRFOutlineTree {
 
 class SRFOutline extends SMWResultPrinter {
 	protected $mOutlineProperties = [];
+	protected $mClass = '';
 	protected $mInnerFormat = '';
 
 	protected function handleParameters( array $params, $outputmode ) {
 		parent::handleParameters( $params, $outputmode );
 		$this->mOutlineProperties = $params['outlineproperties'];
+		$this->mClass = $params['class'];
 	}
 
 	public function getName() {
@@ -206,7 +208,12 @@ class SRFOutline extends SMWResultPrinter {
 		foreach ( $this->mOutlineProperties as $outline_prop ) {
 			$outline_tree->addProperty( $outline_prop );
 		}
+
 		$result = $this->printTree( $outline_tree );
+		if ($this->mClass) {
+			$result = '<div class="' . $this->mClass . '">' . $result . '</div>';
+		}
+
 
 		// print further results footer
 		if ( $this->linkFurtherResults( $res ) ) {
@@ -240,6 +247,12 @@ class SRFOutline extends SMWResultPrinter {
 			'default' => [],
 			'message' => 'srf_paramdesc_outlineproperties',
 		];
+
+		$params['class'] = [
+			'default' => '',
+			'message' => 'srf_paramdesc_class',
+		];
+
 
 		return $params;
 	}
